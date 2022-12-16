@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,6 +45,11 @@ namespace ToDoNote.Views
                 if (this.WindowState == WindowState.Normal)
                     this.WindowState = WindowState.Maximized;
                 else this.WindowState = WindowState.Normal;
+            };
+
+            menuBar.SelectionChanged += (o, e) =>
+            {
+                drawhost.IsLeftDrawerOpen = false;
             };
         }
     }

@@ -8,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using ToDoNote.ViewModels;
 using ToDoNote.Views;
 
 namespace ToDoNote
@@ -20,12 +21,16 @@ namespace ToDoNote
         protected override Window CreateShell()
         {
 
-           return this.Container.Resolve<MainView>();
+            return this.Container.Resolve<MainView>();
         }
 
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterForNavigation<IndexView, IndexViewModel>();
+            containerRegistry.RegisterForNavigation<ToDoView, ToDoViewModel>();
+            containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();
+            containerRegistry.RegisterForNavigation<MemoView, MemoViewModel>();
         }
     }
 }
