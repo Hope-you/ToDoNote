@@ -17,15 +17,19 @@ namespace ToDoNote.ViewModels
 
         public string WelecomTitle
         {
-            get { openSaying(); return welecomTitle; }
-            set { welecomTitle = value; }
+            get { return welecomTitle; }
+            set { welecomTitle = value; RaisePropertyChanged(); }
         }
 
         public IndexViewModel()
         {
+            WelecomTitle = "";
             TaskBarsList = new ObservableCollection<TaskBar>();
+            openSaying();
             CreateTaskBar();
+            CreateTestDate();
         }
+
 
         private async void openSaying()
         {
@@ -39,14 +43,45 @@ namespace ToDoNote.ViewModels
         public ObservableCollection<TaskBar> TaskBarsList
         {
             get { return taskBarList; }
-            set { taskBarList = value; }
+            set { taskBarList = value; RaisePropertyChanged(); }
         }
+
+
+        private ObservableCollection<ToDoDto> toDoDtos;
+
+        public ObservableCollection<ToDoDto> ToDoDtos
+        {
+            get { return toDoDtos; }
+            set { toDoDtos = value; RaisePropertyChanged(); }
+        }
+
+
+        private ObservableCollection<MemoDto> memoDtos;
+
+        public ObservableCollection<MemoDto> MemoDtos
+        {
+            get { return memoDtos; }
+            set { memoDtos = value; RaisePropertyChanged(); }
+        }
+
+
         void CreateTaskBar()
         {
             TaskBarsList.Add(new TaskBar { Icon = "Alarm", Title = "汇总", Color = "#0097ff", Content = "9", Target = "" });
             TaskBarsList.Add(new TaskBar { Icon = "Check", Title = "已完成", Color = "#10b138", Content = "10", Target = "" });
             TaskBarsList.Add(new TaskBar { Icon = "SineWave", Title = "完成率", Color = "#00b4df", Content = "11", Target = "" });
             TaskBarsList.Add(new TaskBar { Icon = "NotebookHeart", Title = "备忘录", Color = "#ffa000", Content = "100%", Target = "" });
+        }
+
+        void CreateTestDate()
+        {
+            ToDoDtos = new ObservableCollection<ToDoDto>();
+            MemoDtos = new ObservableCollection<MemoDto>();
+            for (int i = 0; i < 100; i++)
+            {
+                ToDoDtos.Add(new ToDoDto { Id = i, Content = i + "content 正在处理", Title = "待办" });
+                MemoDtos.Add(new MemoDto { Id = i, Title = "备忘", Content = "我的密码是" });
+            }
         }
 
     }
