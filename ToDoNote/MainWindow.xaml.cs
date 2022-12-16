@@ -23,6 +23,30 @@ namespace ToDoNote
         public MainWindow()
         {
             InitializeComponent();
+            btnMin.Click += (o, e) => { this.WindowState = WindowState.Minimized; };
+
+            btnMax.Click += (o, e) =>
+            {
+                if (this.WindowState == WindowState.Maximized)
+                    this.WindowState = WindowState.Normal;
+                else this.WindowState = WindowState.Maximized;
+            };
+
+            btnClose.Click += (o, e) => { this.Close(); };
+
+            ColorZone.MouseMove += (o, e) =>
+            {
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    this.DragMove();
+                }
+            };
+            ColorZone.MouseDoubleClick += (o, e) =>
+            {
+                if (this.WindowState == WindowState.Normal)
+                    this.WindowState = WindowState.Maximized;
+                else this.WindowState = WindowState.Normal;
+            };
         }
     }
 }
