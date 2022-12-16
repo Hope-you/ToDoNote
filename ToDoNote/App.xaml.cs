@@ -8,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using ToDoNote.Views;
 
 namespace ToDoNote
 {
@@ -19,7 +20,7 @@ namespace ToDoNote
         protected override Window CreateShell()
         {
 
-           return this.Container.Resolve<MainWindow>();
+           return this.Container.Resolve<MainView>();
         }
 
 
