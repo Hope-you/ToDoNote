@@ -15,12 +15,12 @@ namespace ToDoNote.ViewModels
         /// <summary>
         /// 单击右侧添加待办展示侧边栏
         /// </summary>
-        private bool isLeftDrawerOpen;
+        private bool isRightDrawerOpen;
 
-        public bool IsLeftDrawerOpen
+        public bool IsRightDrawerOpen
         {
-            get { return isLeftDrawerOpen; }
-            set { isLeftDrawerOpen = value; RaisePropertyChanged(); }
+            get { return isRightDrawerOpen; }
+            set { isRightDrawerOpen = value; RaisePropertyChanged(); }
         }
 
         public ToDoViewModel()
@@ -32,7 +32,7 @@ namespace ToDoNote.ViewModels
 
         private void AddToDo()
         {
-            IsLeftDrawerOpen = !IsLeftDrawerOpen;
+            IsRightDrawerOpen = !IsRightDrawerOpen;
         }
 
         private ObservableCollection<ToDoDto> toDoDtos;
