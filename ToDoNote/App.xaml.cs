@@ -33,6 +33,8 @@ namespace ToDoNote
             containerRegistry.RegisterForNavigation<MemoView, MemoViewModel>();
 
             containerRegistry.RegisterForNavigation<SkinView, SkinViewModel>();
+            containerRegistry.RegisterForNavigation<SystemView>();
+            containerRegistry.RegisterForNavigation<AboutView>();
         }
     }
 }

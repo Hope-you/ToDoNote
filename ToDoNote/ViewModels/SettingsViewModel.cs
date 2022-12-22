@@ -49,7 +49,7 @@ namespace ToDoNote.ViewModels
         void CreateMenuBar()
         {
             menuBars.Add(new MenuBar { Icon = "HomeCircleOutline", Title = "个性化", NameSpace = "SkinView" });
-            menuBars.Add(new MenuBar { Icon = "NotebookOutline", Title = "系统设置", NameSpace = "" });
+            menuBars.Add(new MenuBar { Icon = "NotebookOutline", Title = "系统设置", NameSpace = "SystemView" });
             menuBars.Add(new MenuBar { Icon = "Head", Title = "关于更多", NameSpace = "AboutView" });
         }
     }

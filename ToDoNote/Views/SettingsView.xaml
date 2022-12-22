@@ -15,17 +15,19 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition />
+            <RowDefinition Height="14*" />
+            <RowDefinition Height="121*" />
         </Grid.RowDefinitions>
 
         <TextBlock Text="设置"
                    FontWeight="Bold"
                    FontSize="20"
-                   Margin="15 10" />
+                   Margin="15,10,15,10" />
         <Border BorderBrush="#dbdbdb"
                 BorderThickness="  0 0 0 3" />
 
-        <Grid>
+        <Grid Margin="0,45,0,0"
+              Grid.RowSpan="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="220" />
                 <ColumnDefinition />
