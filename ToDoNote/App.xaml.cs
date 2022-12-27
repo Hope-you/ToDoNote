@@ -8,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using ToDoNote.Service;
 using ToDoNote.ViewModels;
 using ToDoNote.Views;
 
@@ -27,6 +28,11 @@ namespace ToDoNote
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.GetContainer().Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
+            containerRegistry.GetContainer().RegisterInstance(@"http://localhost:5212/", serviceKey: "webUrl");
+
+            containerRegistry.Register<IToDoService,ToDoService>();
+
             containerRegistry.RegisterForNavigation<IndexView, IndexViewModel>();
             containerRegistry.RegisterForNavigation<ToDoView, ToDoViewModel>();
             containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();

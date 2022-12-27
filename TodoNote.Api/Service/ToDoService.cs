@@ -45,7 +45,7 @@ namespace TodoNote.Api.Service
             {
                 var resp = unitOfWork.GetRepository<ToDo>();
                 var todos = await resp.GetPagedListAsync(predicate: s => string.IsNullOrEmpty(parameter
-                    .Serach) ? true : s.Title.Contains(parameter.Serach),
+                    .Search) ? true : s.Title.Contains(parameter.Search),
                     pageIndex: parameter.PageIndex,
                     pageSize: parameter.PageSize,
                     orderBy: source => source.OrderByDescending(t => t.CreateDate)

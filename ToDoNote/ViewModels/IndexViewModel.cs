@@ -34,7 +34,7 @@ namespace ToDoNote.ViewModels
         private async void openSaying()
         {
             var client = new HttpClient();
-            var res = client.Send(new HttpRequestMessage() { RequestUri = new Uri("https://v1.jinrishici.com/rensheng.txt") });
+            var res = await client.SendAsync(new HttpRequestMessage() { RequestUri = new Uri("https://v1.jinrishici.com/rensheng.txt") });
             WelecomTitle = await res.Content.ReadAsStringAsync();
         }
 

@@ -6,7 +6,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ToDoNote.Common.Models;
+//using ToDoNote.Common.Models;
+using ToDoNote.Service;
+using ToDoNote.Shared.Dtos;
 
 namespace ToDoNote.ViewModels
 {
@@ -23,10 +25,12 @@ namespace ToDoNote.ViewModels
             set { isRightDrawerOpen = value; RaisePropertyChanged(); }
         }
 
-        public ToDoViewModel()
+
+        public ToDoViewModel(IToDoService service)
         {
             ToDoDtos = new ObservableCollection<ToDoDto>();
             AddToDoCommand = new DelegateCommand(AddToDo);
+            this.service = service;
             CreateToDoListData();
         }
 
@@ -36,6 +40,8 @@ namespace ToDoNote.ViewModels
         }
 
         private ObservableCollection<ToDoDto> toDoDtos;
+        private bool toDoIsOpen;
+        private readonly IToDoService service;
 
         public DelegateCommand AddToDoCommand { get; private set; }
 
@@ -44,19 +50,22 @@ namespace ToDoNote.ViewModels
             get { return toDoDtos; }
             set { toDoDtos = value; RaisePropertyChanged(); }
         }
-        void CreateToDoListData()
+        async void CreateToDoListData()
         {
-            for (int i = 0; i < 32; i++)
-            {
-                ToDoDtos.Add(new ToDoDto
-                {
-                    Title = "标题" + i,
-                    Content = i + "内容123123123123",
-                    Id = i,
-                    CreateDate = DateTime.Now,
-                });
-            }
 
+            var res = await service.GetAllAsync(new Shared.Parameters.QueryParameter
+            {
+                PageIndex = 0,
+                PageSize = 100
+            });
+            if (res.Status)
+            {
+                foreach (var item in res.Result.Items)
+                {
+                    if (item != null)
+                        ToDoDtos.Add(item);
+                }
+            }
         }
     }
 }
