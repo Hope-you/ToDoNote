@@ -1,35 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyToDo.Api;
-using TodoNote.Api.Context;
-using TodoNote.Api.Repository;
 using TodoNote.Api.Service;
 using ToDoNote.Shared.Dtos;
 using ToDoNote.Shared.Parameters;
 
 namespace TodoNote.Api.Controllers
 {
+
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class ToDoController : ControllerBase
+    public class MemoController : ControllerBase
     {
-        private readonly IToDoService service;
+        private readonly IMemoService service;
 
-        public ToDoController(IToDoService service)
+        public MemoController(IMemoService service)
         {
             this.service = service;
         }
 
         [HttpPost]
-        public async Task<ApiResponse> Add(ToDoDto model) => await service.AddAsync(model);
+        public async Task<ApiResponse> Add(MemoDto model) => await service.AddAsync(model);
 
         [HttpGet]
 
         public async Task<ApiResponse> Get(int id) => await service.GetSingleAsync(id);
 
         [HttpGet]
-        public async Task<ApiResponse> GetAll([FromQuery] QueryParameter parameter) => await service.GetAllAsync(parameter);
+        public async Task<ApiResponse> GetAll([FromQuery]QueryParameter parameter) => await service.GetAllAsync(parameter);
         [HttpPost]
-        public async Task<ApiResponse> UpDate([FromBody] ToDoDto toDo) => await service.UpdateAsync(toDo);
+        public async Task<ApiResponse> UpDate([FromBody] MemoDto model) => await service.UpdateAsync(model);
 
         [HttpDelete]
 

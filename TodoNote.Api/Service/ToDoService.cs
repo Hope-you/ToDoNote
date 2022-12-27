@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MyToDo.Api;
+using System.Linq;
 using TodoNote.Api.Context;
-using TodoNote.Api.Service;
 using ToDoNote.Shared.Dtos;
+using ToDoNote.Shared.Parameters;
 
-namespace TodoNote.Api.Repository
+namespace TodoNote.Api.Service
 {
     /// <summary>
     /// 待办事项ToDo实现
@@ -38,12 +39,17 @@ namespace TodoNote.Api.Repository
             }
         }
 
-        public async Task<ApiResponse> GetAllAsync()
+        public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
         {
             try
             {
                 var resp = unitOfWork.GetRepository<ToDo>();
-                var todos = await resp.GetAllAsync();
+                var todos = await resp.GetPagedListAsync(predicate: s => string.IsNullOrEmpty(parameter
+                    .Serach) ? true : s.Title.Contains(parameter.Serach),
+                    pageIndex: parameter.PageIndex,
+                    pageSize: parameter.PageSize,
+                    orderBy: source => source.OrderByDescending(t => t.CreateDate)
+                    );
                 return new ApiResponse(true, todos);
             }
             catch (Exception ee)
