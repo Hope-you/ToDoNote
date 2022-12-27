@@ -29,6 +29,8 @@ builder.Services.AddTransient<IToDoService, ToDoService>();
 
 builder.Services.AddTransient<IMemoService, MemoService>();
 
+
+builder.Services.AddTransient<ILoginService, LoginService>();
 //Ìí¼Óautomapper
 var autoMapperConfig = new MapperConfiguration(config =>
 {
