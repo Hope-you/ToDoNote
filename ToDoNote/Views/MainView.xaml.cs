@@ -1,4 +1,5 @@
 ﻿
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ToDoNote.Extension;
 
 namespace ToDoNote.Views
 {
@@ -20,9 +22,20 @@ namespace ToDoNote.Views
     /// </summary>
     public partial class MainView : Window
     {
-        public MainView()
+        public MainView(IEventAggregator aggregator)
         {
             InitializeComponent(); btnMin.Click += (o, e) => { this.WindowState = WindowState.Minimized; };
+
+            //注册等待消息的窗口
+            aggregator.Register(arg =>
+            {
+                DialogHost.IsOpen = arg.IsOpen;
+                if (DialogHost.IsOpen)
+                {
+                    DialogHost.DialogContent = new ProgressView();
+                }
+            });
+
 
             btnMax.Click += (o, e) =>
             {

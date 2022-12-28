@@ -59,7 +59,7 @@ namespace ToDoNote.Service
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.Post;
-            request.Route = $"api/{serviceName}/Update";
+            request.Route = $"api/{serviceName}/UpDate";
             request.Parameter = entity;
             return await client.ExecuteAsync<TEntity>(request);
         }

@@ -1,5 +1,7 @@
 ﻿using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,11 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using ToDoNote.Common.Models;
+using ToDoNote.Service;
+using ToDoNote.Shared.Dtos;
 
 namespace ToDoNote.ViewModels
 {
-    public class MemoViewModel: BindableBase
+    public class MemoViewModel : NavigationViewModel
     {
         /// <summary>
         /// 单击右侧添加待办展示侧边栏
@@ -24,11 +27,11 @@ namespace ToDoNote.ViewModels
             set { isRightDrawerOpen = value; RaisePropertyChanged(); }
         }
 
-        public MemoViewModel()
+        public MemoViewModel(IMemoService service, IContainerProvider containerProvider) : base(containerProvider)
         {
             MemoDtos = new ObservableCollection<MemoDto>();
             AddToDoCommand = new DelegateCommand(AddMemo);
-            CreateToDoListData();
+            this.service = service;
         }
 
         private void AddMemo()
@@ -37,6 +40,7 @@ namespace ToDoNote.ViewModels
         }
 
         private ObservableCollection<MemoDto> memoDtos;
+        private readonly IMemoService service;
 
         public DelegateCommand AddToDoCommand { get; private set; }
 
@@ -45,19 +49,31 @@ namespace ToDoNote.ViewModels
             get { return memoDtos; }
             set { memoDtos = value; RaisePropertyChanged(); }
         }
-        void CreateToDoListData()
-        {
-            for (int i = 0; i < 32; i++)
-            {
-                MemoDtos.Add(new MemoDto
-                {
-                    Title = "标题" + i,
-                    Content = i + "内容123123123123",
-                    Id = i,
-                    CreateDate = DateTime.Now,
-                });
-            }
 
+
+        async void GetMemoListData()
+        {
+            UpdateLoading(true);
+            var res = await service.GetAllAsync(new Shared.Parameters.QueryParameter
+            {
+                PageIndex = 0,
+                PageSize = 100
+            });
+            if (res.Status)
+            {
+                MemoDtos.Clear();
+                foreach (var item in res.Result.Items)
+                {
+                    MemoDtos.Add(item);
+                }
+            }
+            UpdateLoading(false);
+        }
+
+        public override void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            base.OnNavigatedTo(navigationContext);
+            GetMemoListData();
         }
     }
 }

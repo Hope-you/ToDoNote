@@ -77,6 +77,13 @@
                                             <RowDefinition Height="auto" />
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
+
+                                        <!--卡片右上角的三个点，点开有删除-->
+                                        <md:PopupBox HorizontalAlignment="Right"
+                                                     Panel.ZIndex="1">
+                                            <Button Content="删除" />
+                                        </md:PopupBox>
+
                                         <Border Background="#11b038"
                                                 Grid.RowSpan="2"
                                                 CornerRadius="5" />

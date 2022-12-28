@@ -24,7 +24,7 @@
         WindowStyle="None"
         mc:Ignorable="d">
     <materialDesign:DialogHost DialogTheme="Inherit"
-                               Identifier="RootDialog"
+                               Identifier="RootDialog" x:Name="DialogHost"
                                SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
 
         <materialDesign:DrawerHost x:Name="drawhost" IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
