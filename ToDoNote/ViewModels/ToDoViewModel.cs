@@ -1,5 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +13,7 @@ using ToDoNote.Shared.Dtos;
 
 namespace ToDoNote.ViewModels
 {
-    public class ToDoViewModel : BindableBase
+    public class ToDoViewModel : BindableBase, IRegionMemberLifetime
     {
         /// <summary>
         /// 单击右侧添加待办展示侧边栏
@@ -40,7 +41,6 @@ namespace ToDoNote.ViewModels
         }
 
         private ObservableCollection<ToDoDto> toDoDtos;
-        private bool toDoIsOpen;
         private readonly IToDoService service;
 
         public DelegateCommand AddToDoCommand { get; private set; }
@@ -50,6 +50,9 @@ namespace ToDoNote.ViewModels
             get { return toDoDtos; }
             set { toDoDtos = value; RaisePropertyChanged(); }
         }
+
+        public bool KeepAlive => false;
+
         async void CreateToDoListData()
         {
 

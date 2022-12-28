@@ -14,6 +14,7 @@ namespace ToDoNote.ViewModels
 {
     public class MainViewModel : BindableBase
     {
+        public bool KeepAlive => false;
         public DelegateCommand<MenuBar> NavigateCommand { get; private set; }
         public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand GoForwardCommand { get; private set; }

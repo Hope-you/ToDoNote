@@ -1,5 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,13 +8,16 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using ToDoNote.Common.Models;
 
 namespace ToDoNote.ViewModels
 {
-    public class IndexViewModel : BindableBase
+    public class IndexViewModel : BindableBase, IRegionMemberLifetime
     {
         private string welecomTitle;
+        public DelegateCommand CopyOneSaying { get; private set; }
+        public DelegateCommand RefreshOnesaying { get; private set; }
 
         public string WelecomTitle
         {
@@ -25,17 +29,27 @@ namespace ToDoNote.ViewModels
         {
             WelecomTitle = "";
             TaskBarsList = new ObservableCollection<TaskBar>();
-            openSaying();
+            CopyOneSaying = new DelegateCommand(Copy);
+            RefreshOnesaying = new DelegateCommand(ReFresh);
             CreateTaskBar();
             CreateTestDate();
         }
 
+        private async void ReFresh()
+        {
+            WelecomTitle = await openSaying();
+        }
 
-        private async void openSaying()
+        private void Copy()
+        {
+            Clipboard.SetText(WelecomTitle);
+        }
+
+        private async Task<string> openSaying()
         {
             var client = new HttpClient();
             var res = await client.SendAsync(new HttpRequestMessage() { RequestUri = new Uri("https://v1.jinrishici.com/rensheng.txt") });
-            WelecomTitle = await res.Content.ReadAsStringAsync();
+            return await res.Content.ReadAsStringAsync();
         }
 
         private ObservableCollection<TaskBar> taskBarList;
@@ -64,13 +78,16 @@ namespace ToDoNote.ViewModels
             set { memoDtos = value; RaisePropertyChanged(); }
         }
 
+        public bool KeepAlive => false;
 
-        void CreateTaskBar()
+        async void CreateTaskBar()
         {
             TaskBarsList.Add(new TaskBar { Icon = "Alarm", Title = "汇总", Color = "#0097ff", Content = "9", Target = "" });
             TaskBarsList.Add(new TaskBar { Icon = "Check", Title = "已完成", Color = "#10b138", Content = "10", Target = "" });
             TaskBarsList.Add(new TaskBar { Icon = "SineWave", Title = "完成率", Color = "#00b4df", Content = "11", Target = "" });
             TaskBarsList.Add(new TaskBar { Icon = "NotebookHeart", Title = "备忘录", Color = "#ffa000", Content = "100%", Target = "" });
+
+            WelecomTitle = await openSaying();
         }
 
         void CreateTestDate()

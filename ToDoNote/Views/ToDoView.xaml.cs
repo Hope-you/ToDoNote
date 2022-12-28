@@ -25,5 +25,8 @@ namespace ToDoNote.Views
             InitializeComponent();
         }
 
+        private void DrawerHost_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+        }
     }
 }

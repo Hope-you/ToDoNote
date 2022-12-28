@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ToDoNote.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              d:DesignHeight="450"
@@ -18,10 +19,24 @@
         </Grid.RowDefinitions>
 
         <!--欢迎的标题-->
-        <TextBlock Text="{Binding WelecomTitle}"
-                   FontSize=" 22"
-                   Margin="10" />
 
+        <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=SlideInFromLeft}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding WelecomTitle}"
+                           MinWidth="40"
+                           FontSize=" 22"
+                           Margin="10">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                        <i:InvokeCommandAction Command="{Binding RefreshOnesaying}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                </TextBlock>
+                <Button Content="复制"
+                        Command="{Binding CopyOneSaying}"
+                        Style="{StaticResource MaterialDesignFlatButton}" />
+            </StackPanel>
+        </materialDesign:TransitioningContent>
         <ItemsControl Grid.Row="1"
                       ItemsSource="{Binding TaskBarsList}">
             <ItemsControl.ItemsPanel>
@@ -167,7 +182,8 @@
                 <ListBox ItemsSource="{Binding MemoDtos}"
                          DockPanel.Dock="Top"
                          Margin="10 0 10 0"
-                         ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Stretch">
+                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                         HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
 
