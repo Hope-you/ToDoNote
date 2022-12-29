@@ -4,12 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:local="clr-namespace:ToDoNote.Views"
+             xmlns:cv="clr-namespace:ToDoNote.Common.Converts"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
+    <UserControl.Resources>
+        <cv:IntToVisibilityConvert x:Key="toVisibility" />
+    </UserControl.Resources>
     <md:DialogHost>
         <md:DrawerHost IsRightDrawerOpen="{Binding IsRightDrawerOpen}">
             <md:DrawerHost.RightDrawerContent>
@@ -71,7 +74,7 @@
                                FontSize="20"
                                Margin="0 0 15 0" />
                     <ComboBox FontSize="20"
-                              SelectedIndex="0">
+                              SelectedIndex="{Binding SelectedIndex}">
                         <ComboBoxItem>全部</ComboBoxItem>
                         <ComboBoxItem>待办</ComboBoxItem>
                         <ComboBoxItem>已完成</ComboBoxItem>
@@ -82,6 +85,18 @@
                         Margin="0 0 20 0"
                         Command="{Binding ExecuteCommand}"
                         CommandParameter="新增" />
+
+                <StackPanel Grid.Row="1"
+                            VerticalAlignment="Center"
+                            Visibility="{Binding ToDoDtos.Count, Converter={StaticResource toVisibility}}">
+                    <Image Source="https://common.cnblogs.com/images/404-robot.png"
+                           Width="192"
+                           Height=" 192" />
+                    <TextBlock Text="当前没有数据噢"
+                               FontSize="30"
+                               Margin="20"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
                 <ScrollViewer Grid.Row="1">
 
                     <ItemsControl ItemsSource="{Binding ToDoDtos}"
@@ -118,12 +133,30 @@
                                         <!--卡片右上角的三个点，点开有删除-->
                                         <md:PopupBox HorizontalAlignment="Right"
                                                      Panel.ZIndex="1">
-                                            <Button Content="删除" />
+                                            <Button Content="删除"
+                                                    Command="{Binding DataContext.DeleteCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}"
+                                                    CommandParameter="{Binding}" />
                                         </md:PopupBox>
 
-                                        <Border Background="#11b038"
-                                                Grid.RowSpan="2"
-                                                CornerRadius="5" />
+                                        <Border Grid.RowSpan="2"
+                                                CornerRadius="5">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}"
+                                                                     Value="0">
+                                                            <Setter Property="Background"
+                                                                    Value="#31a370" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}"
+                                                                     Value="1">
+                                                            <Setter Property="Background"
+                                                                    Value="#128bff" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                        </Border>
                                         <TextBlock Text="{Binding Title}"
                                                    Margin="10"
                                                    FontWeight="Bold" />
@@ -153,6 +186,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
+
             </Grid>
         </md:DrawerHost>
     </md:DialogHost>

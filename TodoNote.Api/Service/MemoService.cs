@@ -26,7 +26,7 @@ namespace TodoNote.Api.Service
                 //转换之后再写入
                 await unitOfWork.GetRepository<Memo>().InsertAsync(memo);
                 if (await unitOfWork.SaveChangesAsync() > 0)
-                    return new ApiResponse(true, entity);
+                    return new ApiResponse(true, memo);
                 return new ApiResponse(false, "添加数据失败");
             }
             catch (Exception ee)
@@ -35,7 +35,7 @@ namespace TodoNote.Api.Service
             }
         }
 
-        public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
+        public async Task<ApiResponse> GetAllAsync(todoQueryParameter parameter)
         {
             try
             {

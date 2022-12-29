@@ -13,10 +13,10 @@ namespace ToDoNote.Service
     {
         Task<ApiResponse<TEntity>> AddAsync(TEntity entity);
         Task<ApiResponse<TEntity>> UpdateAsync(TEntity entity);
-        Task<ApiResponse> DeleteAsync(int id);
+        Task<ApiResponse<TEntity>> DeleteAsync(int id);
         Task<ApiResponse<TEntity>> GetFirsrOrDefaultAsync(int id);
 
-        Task<ApiResponse<PagedList<TEntity>>> GetAllAsync(QueryParameter parameter);
+        Task<ApiResponse<PagedList<TEntity>>> GetAllAsync(todoQueryParameter parameter);
 
 
 

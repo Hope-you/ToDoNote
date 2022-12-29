@@ -29,15 +29,15 @@ namespace ToDoNote.Service
             return await client.ExecuteAsync<TEntity>(request);
         }
 
-        public async Task<ApiResponse> DeleteAsync(int id)
+        public async Task<ApiResponse<TEntity>> DeleteAsync(int id)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.Delete;
             request.Route = $"api/{serviceName}/Delete?id={id}";
-            return await client.ExecuteAsync(request);
+            return await client.ExecuteAsync<TEntity>(request);
         }
 
-        public async Task<ApiResponse<PagedList<TEntity>>> GetAllAsync(QueryParameter parameter)
+        public async Task<ApiResponse<PagedList<TEntity>>> GetAllAsync(todoQueryParameter parameter)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.Get;

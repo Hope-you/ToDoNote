@@ -48,6 +48,7 @@ namespace ToDoNote.ViewModels
             ToDoDtos = new ObservableCollection<ToDoDto>();
             ExecuteCommand = new DelegateCommand<string>(ExecuteToDo);
             SelectedCommand = new DelegateCommand<ToDoDto>(Selected);
+            DeleteCommand = new DelegateCommand<ToDoDto>(DeleteData);
             this.service = service;
         }
 
@@ -84,6 +85,17 @@ namespace ToDoNote.ViewModels
             }
         }
 
+        private async void DeleteData(ToDoDto obj)
+        {
+            var res = await service.DeleteAsync(obj.Id);
+            if (res.Status)
+            {
+                var thisTodo = ToDoDtos.FirstOrDefault(t => t.Id.Equals(res.Result.Id));
+                if (thisTodo != null)
+                    ToDoDtos.Remove(thisTodo);
+            }
+        }
+
         private async void SaveData()
         {
             if (string.IsNullOrWhiteSpace(currentTodoDto.Title) || string.IsNullOrWhiteSpace(currentTodoDto.Content)) return;
@@ -117,7 +129,7 @@ namespace ToDoNote.ViewModels
                     var addres = await service.AddAsync(CurrentTodoDto);
                     if (addres.Status)
                     {
-                        GetDataAsync();
+                        ToDoDtos.Add(addres.Result);
                         IsRightDrawerOpen = false;
                     }
                 }
@@ -140,10 +152,12 @@ namespace ToDoNote.ViewModels
 
         private ObservableCollection<ToDoDto> toDoDtos;
         private string search;
+        private int? selectedIndex;
         private readonly IToDoService service;
 
         public DelegateCommand<string> ExecuteCommand { get; private set; }
         public DelegateCommand<ToDoDto> SelectedCommand { get; private set; }
+        public DelegateCommand<ToDoDto> DeleteCommand { get; private set; }
 
         public ObservableCollection<ToDoDto> ToDoDtos
         {
@@ -151,14 +165,24 @@ namespace ToDoNote.ViewModels
             set { toDoDtos = value; RaisePropertyChanged(); }
         }
 
+        /// <summary>
+        /// 绑定筛选条件的索引
+        /// </summary>
+        public int? SelectedIndex
+        {
+            get => selectedIndex; set { selectedIndex = value; RaisePropertyChanged(); }
+        }
+
         async void GetDataAsync()
         {
             UpdateLoading(true);
-            var res = await service.GetAllAsync(new Shared.Parameters.QueryParameter
+            int? status = SelectedIndex == 0 ? null : SelectedIndex == 2 ? 1 : 0;
+            var res = await service.GetFilterAll(new Shared.Parameters.ToDoQueryParameter
             {
                 PageIndex = 0,
                 PageSize = 100,
-                Search = Search
+                Search = Search,
+                Status = status
             });
             if (res.Status)
             {
@@ -175,6 +199,7 @@ namespace ToDoNote.ViewModels
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
+            SelectedIndex = 0;
             GetDataAsync();
         }
     }

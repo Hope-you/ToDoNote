@@ -54,7 +54,7 @@ namespace ToDoNote.ViewModels
         async void GetMemoListData()
         {
             UpdateLoading(true);
-            var res = await service.GetAllAsync(new Shared.Parameters.QueryParameter
+            var res = await service.GetAllAsync(new Shared.Parameters.todoQueryParameter
             {
                 PageIndex = 0,
                 PageSize = 100

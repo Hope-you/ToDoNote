@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace ToDoNote.Shared.Parameters
 {
-    public class todoQueryParameter
+    public class ToDoQueryParameter : todoQueryParameter
     {
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
-        public string? Search { get; set; }
+        /// <summary>
+        /// 筛选状态
+        /// </summary>
+        public int? Status { get; set; }
     }
 }

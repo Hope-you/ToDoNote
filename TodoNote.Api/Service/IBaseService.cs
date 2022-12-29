@@ -4,7 +4,7 @@ namespace TodoNote.Api.Service
 {
     public interface IBaseService<T>
     {
-        Task<ApiResponse> GetAllAsync(QueryParameter parameter);
+        Task<ApiResponse> GetAllAsync(todoQueryParameter parameter);
         Task<ApiResponse> GetSingleAsync(int id);
 
         Task<ApiResponse> AddAsync(T entity);

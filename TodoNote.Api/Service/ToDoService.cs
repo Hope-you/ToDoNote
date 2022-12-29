@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MyToDo.Api;
+using System.Data.Common;
 using System.Linq;
+using System.Reflection.Metadata;
 using TodoNote.Api.Context;
 using ToDoNote.Shared.Dtos;
 using ToDoNote.Shared.Parameters;
@@ -30,7 +32,8 @@ namespace TodoNote.Api.Service
                 //转换之后再写入
                 await unitOfWork.GetRepository<ToDo>().InsertAsync(todo);
                 if (await unitOfWork.SaveChangesAsync() > 0)
-                    return new ApiResponse(true, entity);
+                    //savechange之后，会自动更新这个对象的id，可以理解成自动和数据库同步
+                    return new ApiResponse(true, todo);
                 return new ApiResponse(false, "添加数据失败");
             }
             catch (Exception ee)
@@ -39,7 +42,7 @@ namespace TodoNote.Api.Service
             }
         }
 
-        public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
+        public async Task<ApiResponse> GetAllAsync(todoQueryParameter parameter)
         {
             try
             {
@@ -48,6 +51,27 @@ namespace TodoNote.Api.Service
                     .Search) ? true : s.Title.Contains(parameter.Search),
                     pageIndex: parameter.PageIndex,
                     pageSize: parameter.PageSize,
+                    orderBy: source => source.OrderByDescending(t => t.CreateDate)
+                    );
+                return new ApiResponse(true, todos);
+            }
+            catch (Exception ee)
+            {
+                return new ApiResponse(ee.Message);
+            }
+        }
+
+
+
+        public async Task<ApiResponse> GetAllAsync(ToDoQueryParameter toDoQueryParameter)
+        {
+            try
+            {
+                var resp = unitOfWork.GetRepository<ToDo>();
+                var todos = await resp.GetPagedListAsync(predicate: s => (string.IsNullOrEmpty(toDoQueryParameter
+                    .Search) || s.Title.Contains(toDoQueryParameter.Search)) && (toDoQueryParameter.Status == null || s.Status.Equals(toDoQueryParameter.Status)),
+                pageIndex: toDoQueryParameter.PageIndex,
+                    pageSize: toDoQueryParameter.PageSize,
                     orderBy: source => source.OrderByDescending(t => t.CreateDate)
                     );
                 return new ApiResponse(true, todos);
@@ -114,5 +138,6 @@ namespace TodoNote.Api.Service
                 return new ApiResponse(ee.Message);
             }
         }
+
     }
 }
