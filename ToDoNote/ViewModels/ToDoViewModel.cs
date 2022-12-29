@@ -105,17 +105,20 @@ namespace ToDoNote.ViewModels
                             todo.Content = CurrentTodoDto.Content;
 
                             todo.Status = CurrentTodoDto.Status;
+                            IsRightDrawerOpen = false;
                         }
                     }
 
                 }
                 else
                 {
+                    CurrentTodoDto.CreateDate = DateTime.Now;
+                    currentTodoDto.UpdateDate = DateTime.Now;
                     var addres = await service.AddAsync(CurrentTodoDto);
                     if (addres.Status)
                     {
                         ToDoDtos.Add(addres.Result);
-                        isRightDrawerOpen = false;
+                        IsRightDrawerOpen = false;
                     }
                 }
             }
@@ -131,7 +134,7 @@ namespace ToDoNote.ViewModels
 
         private void Add()
         {
-
+            CurrentTodoDto = new ToDoDto();
             IsRightDrawerOpen = !IsRightDrawerOpen;
         }
 

@@ -30,19 +30,39 @@ namespace ToDoNote.Service
             client.Options.BaseUrl = new Uri(apiUrl + baseRequest.Route);
             var res = await client.ExecuteAsync(request);
 
-            return JsonConvert.DeserializeObject<ApiResponse>(res.Content);
+
+
+            if (res.StatusCode == System.Net.HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<ApiResponse>(res.Content);
+            else
+            {
+                return new ApiResponse()
+                {
+                    Status = false,
+                    Message = res.ErrorMessage + res.StatusCode.ToString()
+                };
+            }
         }
 
         public async Task<ApiResponse<T>> ExecuteAsync<T>(BaseRequest baseRequest)
         {
-            var request = new RestRequest("", baseRequest.Method);
+            var request = new RestRequest(apiUrl + baseRequest.Route, baseRequest.Method);
             request.AddHeader("Content-Type", baseRequest.ContentType);
             if (baseRequest.Parameter != null)
-                request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
-            client.Options.BaseUrl = new Uri(apiUrl + baseRequest.Route);
+                //增加post参数，
+                request.AddJsonBody(baseRequest.Parameter);
+            //request.AddParameter("param", , ParameterType.RequestBody);
             var res = await client.ExecuteAsync(request);
-
-            return JsonConvert.DeserializeObject<ApiResponse<T>>(res.Content);
+            if (res.StatusCode == System.Net.HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<ApiResponse<T>>(res.Content);
+            else
+            {
+                return new ApiResponse<T>()
+                {
+                    Status = false,
+                    Message = res.ErrorMessage + res.StatusCode.ToString()
+                };
+            }
         }
     }
 }
