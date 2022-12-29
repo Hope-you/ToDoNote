@@ -117,7 +117,7 @@ namespace ToDoNote.ViewModels
                     var addres = await service.AddAsync(CurrentTodoDto);
                     if (addres.Status)
                     {
-                        ToDoDtos.Add(addres.Result);
+                        GetDataAsync();
                         IsRightDrawerOpen = false;
                     }
                 }
@@ -158,7 +158,7 @@ namespace ToDoNote.ViewModels
             {
                 PageIndex = 0,
                 PageSize = 100,
-                Search = search
+                Search = Search
             });
             if (res.Status)
             {
