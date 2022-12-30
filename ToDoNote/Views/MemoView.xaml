@@ -5,9 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ToDoNote.Views"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:cv="clr-namespace:ToDoNote.Common.Converts"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
+    <UserControl.Resources>
+        <cv:IntToVisibilityConvert x:Key="toVisibility" />
+    </UserControl.Resources>
     <md:DialogHost>
         <md:DrawerHost IsRightDrawerOpen="{Binding IsRightDrawerOpen}">
             <md:DrawerHost.RightDrawerContent>
@@ -28,7 +32,9 @@
                              Height="100" />
                     <Button Content="添加到备忘录"
                             DockPanel.Dock="Top"
-                            Margin="10 0 10 0" />
+                            Margin="10 0 10 0"
+                            Command="{Binding ExecuteCommand}"
+                            CommandParameter="保存" />
                 </DockPanel>
             </md:DrawerHost.RightDrawerContent>
 
@@ -42,14 +48,22 @@
                     <TextBox Width="220"
                              Margin="20"
                              FontSize="20"
+                             Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"
                              md:HintAssist.Hint="查找备忘录事项..."
                              md:HintAssist.HintOpacity="0.8"
-                             md:TextFieldAssist.HasClearButton="True" />
+                             md:TextFieldAssist.HasClearButton="True">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter"
+                                        Command="{Binding ExecuteCommand}"
+                                        CommandParameter="查询" />
+                        </TextBox.InputBindings>
+                    </TextBox>
                 </StackPanel>
                 <Button HorizontalAlignment="Right"
                         Content="+ 添加备忘录"
                         Margin="0 0 20 0"
-                        Command="{Binding AddToDoCommand}" />
+                        Command="{Binding ExecuteCommand}"
+                        CommandParameter="新增" />
 
 
                 <ScrollViewer Grid.Row="1">
@@ -78,13 +92,26 @@
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
 
+
+                                        <StackPanel Grid.Row="1"
+                                                    VerticalAlignment="Center"
+                                                    Visibility="{Binding MemoDtos.Count, Converter={StaticResource toVisibility}}">
+                                            <Image Source="https://common.cnblogs.com/images/404-robot.png"
+                                                   Width="192"
+                                                   Height=" 192" />
+                                            <TextBlock Text="当前没有数据噢"
+                                                       FontSize="30"
+                                                       Margin="20"
+                                                       HorizontalAlignment="Center" />
+                                        </StackPanel>
+
                                         <!--卡片右上角的三个点，点开有删除-->
                                         <md:PopupBox HorizontalAlignment="Right"
                                                      Panel.ZIndex="1">
                                             <Button Content="删除" />
                                         </md:PopupBox>
 
-                                        <Border Background="#11b038"
+                                        <Border Background="#31a370"
                                                 Grid.RowSpan="2"
                                                 CornerRadius="5" />
                                         <TextBlock Text="{Binding Title}"

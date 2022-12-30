@@ -16,7 +16,7 @@ namespace ToDoNote.Service
         Task<ApiResponse<TEntity>> DeleteAsync(int id);
         Task<ApiResponse<TEntity>> GetFirsrOrDefaultAsync(int id);
 
-        Task<ApiResponse<PagedList<TEntity>>> GetAllAsync(todoQueryParameter parameter);
+        Task<ApiResponse<PagedList<TEntity>>> GetAllAsync(QueryParameter parameter);
 
 
 

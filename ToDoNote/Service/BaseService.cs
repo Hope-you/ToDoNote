@@ -37,7 +37,7 @@ namespace ToDoNote.Service
             return await client.ExecuteAsync<TEntity>(request);
         }
 
-        public async Task<ApiResponse<PagedList<TEntity>>> GetAllAsync(todoQueryParameter parameter)
+        public async Task<ApiResponse<PagedList<TEntity>>> GetAllAsync(QueryParameter parameter)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.Get;

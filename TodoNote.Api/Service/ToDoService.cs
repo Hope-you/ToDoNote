@@ -42,7 +42,7 @@ namespace TodoNote.Api.Service
             }
         }
 
-        public async Task<ApiResponse> GetAllAsync(todoQueryParameter parameter)
+        public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
         {
             try
             {
